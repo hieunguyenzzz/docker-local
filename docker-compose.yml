@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+    magentophp70:
+        build: ./docker-magento-php70
+        ports:
+          - "5902:5902"
+          - "9003:9000"
+        volumes:
+          - "/private/var/www:/var/www"
+          - "/Users/hieunguyen/.ssh:/root/.ssh"
+          - "/Users/hieunguyen/.composer:/root/.composer"
+          - ./docker-magento-php70/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+          - ./docker-magento-php70/conf/cacert.pem:/usr/local/etc/php/cacert.pem
+          - ./docker-magento-php70/zsh/.zshrc:/root/.zshrc
+          - ./docker-magento-php70/zsh/.zsh_history:/root/.zsh_history
+        environment:
+          - ZSH_THEME=afowler     
+    mysql:
+        build: ./mysql
+        command: "--innodb_use_native_aio=0"
+        ports:
+          - "3306:3306"
+        volumes:
+          - "/Users/hieunguyen/docker-php/data/mysql:/var/lib/mysql"
+          - /Users/hieunguyen/docker-php/config/mysql/my.cnf:/etc/mysql/my.cnf
+        environment:
+          - MYSQL_ROOT_PASSWORD=root123
+          - MYSQL_USER=mage
+          - MYSQL_PASSWORD=mage
+    redis:
+        image: redis
+        ports:
+          - "6379"
+    elasticsearch:
+        image: vortexcommerce/elasticsearch:2.4.6
+        ports:
+          - "9200:9200"
+          - "9300:9300"
+
+volumes:
+  elasticdata:
