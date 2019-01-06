@@ -54,6 +54,6 @@ COPY conf/php.ini /usr/local/etc/php/
 COPY conf/php-fpm.conf /usr/local/etc/
 COPY bin/* /usr/local/bin/
 
-WORKDIR /var/www
+WORKDIR /usr/local/var/www
 
 CMD ["/usr/local/bin/start"]

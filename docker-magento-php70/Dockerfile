@@ -38,7 +38,7 @@ RUN git config --global --add oh-my-zsh.hide-status 1
 RUN curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash -s
 RUN pecl install xdebug
 
-ENV PHP_MEMORY_LIMIT 2G
+ENV PHP_MEMORY_LIMIT 3G
 ENV PHP_PORT 9000
 ENV PHP_PM dynamic
 ENV PHP_PM_MAX_CHILDREN 10
@@ -47,13 +47,13 @@ ENV PHP_PM_MIN_SPARE_SERVERS 2
 ENV PHP_PM_MAX_SPARE_SERVERS 6
 ENV APP_MAGE_MODE default
 
-RUN usermod -u 1000 www-data
+RUN usermod -u 501 www-data
 
 COPY conf/www.conf /usr/local/etc/php-fpm.d/
 COPY conf/php.ini /usr/local/etc/php/
 COPY conf/php-fpm.conf /usr/local/etc/
 COPY bin/* /usr/local/bin/
 
-WORKDIR /var/www
+WORKDIR /usr/local/var/www
 
 CMD ["/usr/local/bin/start"]

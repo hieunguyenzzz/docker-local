@@ -1,0 +1,7 @@
+.git
+.idea
+generated
+setup
+update
+lib
+dev
