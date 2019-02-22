@@ -1,0 +1,3 @@
+location ~* ^.+\.(jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|pdf|txt|tar|wav|bmp|rtf|js|flv|swf|ttf|woff|woff2)$ {
+            root $MAGE_ROOT;
+}
