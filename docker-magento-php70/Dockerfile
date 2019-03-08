@@ -11,6 +11,20 @@ RUN apt-get update && apt-get install -y \
   mysql-client \
   zip
 
+
+
+RUN curl -sS https://raw.githubusercontent.com/composer/getcomposer.org/master/web/installer | \
+  php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN apt-get update
+RUN apt-get install -y vim
+RUN apt-get install -y git
+RUN apt-get install -y zsh
+RUN git config --global --add oh-my-zsh.hide-status 1
+RUN curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash -s
+RUN pecl install xdebug
+RUN pecl install grpc
+
 RUN docker-php-ext-configure \
   gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
 
@@ -25,18 +39,8 @@ RUN docker-php-ext-install \
   soap \
   xsl \
   zip \
-  pcntl
-
-RUN curl -sS https://raw.githubusercontent.com/composer/getcomposer.org/master/web/installer | \
-  php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN apt-get update
-RUN apt-get install -y vim
-RUN apt-get install -y git
-RUN apt-get install -y zsh
-RUN git config --global --add oh-my-zsh.hide-status 1
-RUN curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash -s
-RUN pecl install xdebug
+  pcntl \
+  sockets
 
 ENV PHP_MEMORY_LIMIT 3G
 ENV PHP_PORT 9000
