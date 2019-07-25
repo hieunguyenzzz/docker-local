@@ -7,7 +7,7 @@ services:
           - "5902:5902"
           - "9003:9000"
         volumes:
-          - "/Users/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
           - "/ssh:/root/.ssh"
           - "/composer:/root/.composer"
           - ./docker-magento-php70/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -24,7 +24,7 @@ services:
           - "5903:5902"
           - "9004:9000"
         volumes:
-          - "/Users/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
           - "/ssh:/root/.ssh"
           - "/composer:/root/.composer"
           - ./php72/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -47,6 +47,11 @@ services:
         image: redis
         ports:
           - "6379"
+    nginx:
+        build: ./nginx
+        ports:
+          - "80:80"
+          - "443:443"
     elasticsearch:
         image: vortexcommerce/elasticsearch:5.6.8
         ports:
@@ -62,4 +67,3 @@ services:
 
 volumes:
   mysql-sync:
-
