@@ -49,6 +49,8 @@ services:
           - "6379"
     nginx:
         build: ./nginx
+        volumes:
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
         ports:
           - "80:80"
           - "443:443"
