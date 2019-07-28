@@ -3,9 +3,6 @@ version: '3'
 services:
     magentophp70:
         build: ./docker-magento-php70
-        ports:
-          - "5902:5902"
-          - "9003:9000"
         volumes:
           - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
           - "/ssh:/root/.ssh"
@@ -20,9 +17,6 @@ services:
 
     php72:
         build: ./php72
-        ports:
-          - "5903:5902"
-          - "9004:9000"
         volumes:
           - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
           - "/ssh:/root/.ssh"
