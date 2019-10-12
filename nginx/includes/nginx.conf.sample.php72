@@ -46,7 +46,7 @@ location ~* ^/setup($|/) {
 
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-        fastcgi_param  MAGE_MODE $MAGE_MODE;
+        #fastcgi_param  MAGE_MODE $MAGE_MODE;
         include        fastcgi_params;
     }
 
@@ -69,7 +69,7 @@ location ~* ^/update($|/) {
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         fastcgi_param  PATH_INFO        $fastcgi_path_info;
-        fastcgi_param  MAGE_MODE $MAGE_MODE;
+        #fastcgi_param  MAGE_MODE $MAGE_MODE;
         include        fastcgi_params;
     }
 
@@ -84,7 +84,7 @@ location ~* ^/update($|/) {
 }
 
 location / {
-    try_files $uri $uri/ /index.php$is_args$args;
+    try_files $uri /index.php$is_args$args;
 }
 
 location /pub/ {
@@ -175,7 +175,8 @@ location ~ (index|get|static|report|404|503|health_check)\.php$ {
 
     fastcgi_index  index.php;
     fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-    fastcgi_param  MAGE_MODE $MAGE_MODE;
+    #fastcgi_param  MAGE_MODE $MAGE_MODE;
+    #fastcgi_param  MAGE_PROFILER html;
     include        fastcgi_params;
 }
 
