@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+    magentophp70:
+        build: ./docker-magento-php70
+        volumes:
+          - app_data:/usr/local/var/www:delegated
+          - "/Users/hieunguyen/.ssh:/root/.ssh"
+          - "/Users/hieunguyen/.composer:/root/.composer"
+          - ./docker-magento-php70/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+          - ./docker-magento-php70/conf/cacert.pem:/usr/local/etc/php/cacert.pem
+          - ./docker-magento-php70/zsh/.zshrc:/root/.zshrc
+          - ./docker-magento-php70/zsh/.zsh_history:/root/.zsh_history
+        environment:
+          - ZSH_THEME=afowler
+          - PHP_MEMORY_LIMIT=3G
+
+    php72:
+        build: ./php72
+        volumes:
+          - app_data:/usr/local/var/www:delegated
+          - "/Users/hieunguyen/.ssh:/root/.ssh"
+          - "/Users/hieunguyen/.composer:/root/.composer"
+          - ./php72/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+          - ./php72/zsh/.zshrc:/root/.zshrc
+          - ./php72/zsh/.zsh_history:/root/.zsh_history
+        environment:
+        - ZSH_THEME=afowler
+    mysql:
+        build: ./mysql
+        command: "--innodb_use_native_aio=0"
+        ports:
+          - "3306:3306"
+        volumes:
+          - "mysql-sync:/var/lib/mysql:cached"
+        environment:
+          - MYSQL_ROOT_PASSWORD=root123
+          - MYSQL_USER=mage
+          - MYSQL_PASSWORD=mage
+    redis:
+        image: redis
+        ports:
+          - "6379"
+    nginx:
+        build: ./nginx
+        volumes:
+          - app_data:/usr/local/var/www:delegated
+        ports:
+          - "80:80"
+          - "443:443"
+    elasticsearch:
+        image: vortexcommerce/elasticsearch:5.6.8
+        ports:
+          - "9200:9200"
+          - "9300:9300"
+        environment:
+          - bootstrap.memory_lock=true
+          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+          memlock:
+            soft: -1
+            hard: -1
+
+volumes:
+  mysql-sync:
+  app_data:
+    external: true

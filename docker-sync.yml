@@ -1,54 +1,13 @@
 version: "2"
 
 options:
-  # default: docker-compose.yml if you like, you can set a custom location (path) of your compose file like ~/app/compose.yml
-  # HINT: you can also use this as an array to define several compose files to include. Order is important!
-  compose-file-path: 'docker-compose.yml'
-
-  # optional, activate this if you need to debug something, default is false
-  # IMPORTANT: do not run stable with this, it creates a memory leak, turn off verbose when you are done testing
   verbose: true
-
-  # ADVANCED: the image to use for the rsync container. Do not change this until you exactly know, what you are doing
-   # replace <sync_strategy> with either rsync, unison, native_osx to set a custom image for all sync of this type
-   # do not do that if you really do not need that!
-  unison_image: 'eugenmayer/unison:2.51.2.1'
-
-  # optional, default auto, can be docker-sync, thor or auto and defines how the sync will be invoked on the cli. Mostly depending if your are using docker-sync solo, scaffolded or in development ( thor )
-  cli_mode: 'auto'
-  # optional, maximum number of attempts for unison waiting for the success exit status. The default is 5 attempts (1-second sleep for each attempt). Only used in unison.
-  max_attempt: 5
-
-  # optional, default: pwd, root directory to be used when transforming sync src into absolute path, accepted values: pwd (current working directory), config_path (the directory where docker-sync.yml is found)
-  project_root: 'pwd'
-
 syncs:
-  php-sync:
-    # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
-    # good thing in case you are developing and want to know exactly when your changes took effect.
-    # be aware in case of unison this only gives you a notification on the initial sync, not the syncs after changes.
-    notify_terminal: true
-
-    # which folder to watch / sync from - you can use tilde (~), it will get expanded. Be aware that the trailing slash makes a difference
-    # if you add them, only the inner parts of the folder gets synced, otherwise the parent folder will be synced as top-level folder
-    src: './projects'
-
-    # optional, default can be either rsync or unison See Strategies in the wiki for explanation
-    sync_strategy: 'unison'
-    sync_prefer: 'src'
-    watch_in_container: true
-
-  mysql-sync:
-    # enable terminal_notifier. On every sync sends a Terminal Notification regarding files being synced. ( Mac Only ).
-    # good thing in case you are developing and want to know exactly when your changes took effect.
-    # be aware in case of unison this only gives you a notification on the initial sync, not the syncs after changes.
-    notify_terminal: true
-
-    # which folder to watch / sync from - you can use tilde (~), it will get expanded. Be aware that the trailing slash makes a difference
-    # if you add them, only the inner parts of the folder gets synced, otherwise the parent folder will be synced as top-level folder
-    src: './data/mysql'
-
-    # optional, default can be either rsync or unison See Strategies in the wiki for explanation
-    sync_strategy: 'unison'
-    sync_prefer: 'src'
-    watch_in_container: true
+  #IMPORTANT: ensure this name is unique and does not match your other container names
+  app_data:
+    src: ${WORKDIR}
+    sync_strategy: 'native_osx'
+    sync_args:
+    - "-prefer newer"
+    - "-ignore='Path .git'"
+    - "-ignore='BelowPath .git'"
