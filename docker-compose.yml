@@ -26,6 +26,17 @@ services:
           - ./php72/zsh/.zsh_history:/root/.zsh_history
         environment:
         - ZSH_THEME=afowler
+    php71:
+        build: ./docker-magento-php71
+        volumes:
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
+          - "/ssh:/root/.ssh"
+          - "/composer:/root/.composer"
+          - ./docker-magento-php71/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+          - ./docker-magento-php71/zsh/.zshrc:/root/.zshrc
+          - ./docker-magento-php71/zsh/.zsh_history:/root/.zsh_history
+        environment:
+        - ZSH_THEME=afowler
     mysql:
         build: ./mysql
         command: "--innodb_use_native_aio=0"
@@ -60,6 +71,27 @@ services:
           memlock:
             soft: -1
             hard: -1
+    fastpanel:
+      container_name: letsencrypt
+      build:
+        context: ./fastpanel
+      image: hieunguyen/fastpanel
+      command: /bin/true
+      tty: true
+    letsencrypt:
+      container_name: letsencrypt
+      build:
+        context: ./letsencrypt
+        args:
+          SHOP_URI: 'magento233.m2loc'
+      image: hieunguyen/letsencrypt
+      command: /bin/true
+      volumes:
+        - letsencrypt_certs:/etc/letsencrypt
+        - letsencrypt_www:/var/www/letsencrypt
+      tty: true
 
 volumes:
   mysql-sync:
+  letsencrypt_certs:
+  letsencrypt_www:

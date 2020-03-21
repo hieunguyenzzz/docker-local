@@ -45,7 +45,7 @@ RUN wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.18.tar.
     && make && make install \
     && pecl install -f libsodium
 
-ENV PHP_MEMORY_LIMIT 2G
+ENV PHP_MEMORY_LIMIT 6G
 ENV PHP_PORT 9000
 ENV PHP_PM dynamic
 ENV PHP_PM_MAX_CHILDREN 10

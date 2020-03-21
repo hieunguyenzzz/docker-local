@@ -9,3 +9,5 @@ ADD ./includes/ /etc/nginx/includes/
 ADD ./ssl/ /etc/nginx/ssl/
 
 COPY ./nginx.conf /etc/nginx/nginx.conf
+
+RUN usermod -u 1000 www-data

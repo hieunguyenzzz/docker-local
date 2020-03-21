@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y \
   libjpeg62-turbo-dev \
   libmcrypt-dev \
   libxslt1-dev \
-  mysql-client \
   zip
 
 
