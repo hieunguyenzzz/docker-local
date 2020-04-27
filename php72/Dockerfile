@@ -24,7 +24,8 @@ RUN docker-php-ext-install \
   soap \
   xsl \
   zip \
-  pcntl
+  pcntl \
+  sockets
 
 RUN curl -sS https://raw.githubusercontent.com/composer/getcomposer.org/master/web/installer | \
   php -- --install-dir=/usr/local/bin --filename=composer
