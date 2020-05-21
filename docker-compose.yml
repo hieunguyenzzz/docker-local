@@ -14,6 +14,12 @@ services:
         environment:
           - ZSH_THEME=afowler
           - PHP_MEMORY_LIMIT=3G
+    php56:
+        build: ./php56
+        volumes:
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
+          - "/ssh:/root/.ssh"
+          - "/composer:/root/.composer"
 
     php72:
         build: ./php72
@@ -71,26 +77,11 @@ services:
           memlock:
             soft: -1
             hard: -1
-    fastpanel:
-      container_name: letsencrypt
-      build:
-        context: ./fastpanel
-      image: hieunguyen/fastpanel
-      command: /bin/true
-      tty: true
-    letsencrypt:
-      container_name: letsencrypt
-      build:
-        context: ./letsencrypt
-        args:
-          SHOP_URI: 'magento233.m2loc'
-      image: hieunguyen/letsencrypt
-      command: /bin/true
-      volumes:
-        - letsencrypt_certs:/etc/letsencrypt
-        - letsencrypt_www:/var/www/letsencrypt
-      tty: true
-
+    ubuntu:
+        build: ./vnc
+        ports:
+          - "5900:5900"
+        tty: true
 volumes:
   mysql-sync:
   letsencrypt_certs:
