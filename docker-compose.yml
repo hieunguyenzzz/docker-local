@@ -14,12 +14,6 @@ services:
         environment:
           - ZSH_THEME=afowler
           - PHP_MEMORY_LIMIT=3G
-    php56:
-        build: ./php56
-        volumes:
-          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
-          - "/ssh:/root/.ssh"
-          - "/composer:/root/.composer"
 
     php72:
         build: ./php72
@@ -30,6 +24,17 @@ services:
           - ./php72/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
           - ./php72/zsh/.zshrc:/root/.zshrc
           - ./php72/zsh/.zsh_history:/root/.zsh_history
+        environment:
+        - ZSH_THEME=afowler
+    php73:
+        build: ./php73
+        volumes:
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
+          - "/ssh:/root/.ssh"
+          - "/composer:/root/.composer"
+          - ./php73/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+          - ./php73/zsh/.zshrc:/root/.zshrc
+          - ./php73/zsh/.zsh_history:/root/.zsh_history
         environment:
         - ZSH_THEME=afowler
     php71:
@@ -66,17 +71,13 @@ services:
           - "80:80"
           - "443:443"
     elasticsearch:
-        image: vortexcommerce/elasticsearch:5.6.8
+        image: elasticsearch:7.9.1
         ports:
           - "9200:9200"
           - "9300:9300"
         environment:
-          - bootstrap.memory_lock=true
-          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-        ulimits:
-          memlock:
-            soft: -1
-            hard: -1
+        - discovery.type=single-node
+        tty: true
     ubuntu:
         build: ./vnc
         ports:

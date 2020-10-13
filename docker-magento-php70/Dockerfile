@@ -21,7 +21,7 @@ RUN apt-get install -y git
 RUN apt-get install -y zsh
 RUN git config --global --add oh-my-zsh.hide-status 1
 RUN curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash -s
-RUN pecl install xdebug
+#RUN pecl install xdebug
 RUN pecl install grpc
 
 RUN docker-php-ext-configure \
@@ -56,6 +56,7 @@ COPY conf/www.conf /usr/local/etc/php-fpm.d/
 COPY conf/php.ini /usr/local/etc/php/
 COPY conf/php-fpm.conf /usr/local/etc/
 COPY bin/* /usr/local/bin/
+COPY conf/no-debug-non-zts-20151012/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20151012/
 
 WORKDIR /usr/local/var/www
 

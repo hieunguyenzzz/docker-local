@@ -55,5 +55,6 @@ COPY conf/php-fpm.conf /usr/local/etc/
 COPY bin/* /usr/local/bin/
 
 WORKDIR /usr/local/var/www
+chown www-data:www-data /var/www
 
 CMD ["/usr/local/bin/start"]
