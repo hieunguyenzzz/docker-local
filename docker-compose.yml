@@ -78,6 +78,14 @@ services:
         environment:
         - discovery.type=single-node
         tty: true
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - "5672:5672"
+        environment:
+          - RABBITMQ_DEFAULT_USER=user
+          - RABBITMQ_DEFAULT_PASS=password
+        tty: true
     ubuntu:
         build: ./vnc
         ports:
@@ -85,5 +93,3 @@ services:
         tty: true
 volumes:
   mysql-sync:
-  letsencrypt_certs:
-  letsencrypt_www:
