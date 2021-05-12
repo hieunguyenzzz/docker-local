@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# Start the php-fpm service
-/usr/local/sbin/php-fpm
