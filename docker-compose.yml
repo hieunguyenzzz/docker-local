@@ -12,28 +12,52 @@ services:
           - ./php73/zsh/.zsh_history:/root/.zsh_history
         environment:
         - ZSH_THEME=afowler
+    php72: 
+        build: ./php72
+        volumes: 
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"          
+    php74: 
+      build: ./php74
+      volumes: 
+        - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"    
     mysql:
-        build: ./mysql
-        command: "--innodb_use_native_aio=0"
-        ports:
-          - "3306:3306"
-        volumes:
-          - "mysql-sync:/var/lib/mysql:cached"
-        environment:
-          - MYSQL_ROOT_PASSWORD=root123
-          - MYSQL_USER=mage
-          - MYSQL_PASSWORD=mage
+      build: ./mysql
+      command: "--innodb_use_native_aio=0"
+      ports:
+        - "3306:3306"
+      volumes:
+        - "mysql-sync:/var/lib/mysql:cached"
+      environment:
+        - MYSQL_ROOT_PASSWORD=root123
+        - MYSQL_USER=mage
+        - MYSQL_PASSWORD=mage
+    mysql8:
+      build: ./mysql8    
+      ports:
+        - "33060:3306"
+      volumes:
+        - "mysql8-sync:/var/lib/mysql"
+      environment:
+        - MYSQL_ROOT_PASSWORD=root123
+        - MYSQL_USER=mage
+        - MYSQL_PASSWORD=m!ageAE8@
     redis:
         image: redis
         ports:
           - "6379"
+    debian:
+        build: ./debian
+        command: tail -F anything
     nginx:
         build: ./nginx
         volumes:
           - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
-        ports:
+    varnish:
+        build: ./varnish          
+        ports: 
           - "80:80"
-          - "443:443"
+        depends_on:
+          - "nginx"        
     elasticsearch:
         image: elasticsearch:7.9.1
         ports:
@@ -42,5 +66,86 @@ services:
         environment:
         - discovery.type=single-node
         tty: true
+    strapi:
+        image: strapi/strapi
+        environment:
+          DATABASE_CLIENT: mysql
+          DATABASE_HOST: mysql
+          DATABASE_PORT: 3306
+          DATABASE_NAME: strapi
+          DATABASE_USERNAME: strapi
+          DATABASE_PASSWORD: strapi
+          DATABASE_SSL: 'false'
+        volumes:
+          - ./app:/srv/app
+        ports:
+          - '1337:1337'
+    strapi-shopify-product-attribute:
+      image: strapi/strapi
+      environment:
+        DATABASE_CLIENT: mysql
+        DATABASE_HOST: mysql
+        DATABASE_PORT: 3306
+        DATABASE_NAME: strapi-merakicommerce
+        DATABASE_USERNAME: strapi
+        DATABASE_PASSWORD: sandworm-proud-gradient
+        DATABASE_SSL: 'false'
+      volumes:
+        - ./projects/strapi-shopify-sample-app:/srv/app
+      ports:
+        - '13370:1337'
+      depends_on:
+        - mysql    
+    strapi-tina:
+      image: strapi/strapi
+      environment:
+        DATABASE_CLIENT: mysql
+        DATABASE_HOST: mysql
+        DATABASE_PORT: 3306
+        DATABASE_NAME: strapi-tina
+        DATABASE_USERNAME: strapi
+        DATABASE_PASSWORD: sandworm-proud-gradient      
+      volumes:
+        - ./projects/strapi-tina:/srv/app
+      ports:
+        - '1338:1337'
+      depends_on:
+        - mysql    
+    strapi-merakiweddingplanner:
+      image: strapi/strapi
+      environment:
+        NODE_ENV: production
+        DATABASE_CLIENT: mysql
+        DATABASE_HOST: mysql
+        DATABASE_PORT: 3306
+        DATABASE_NAME: strapi-merakiweddingplanner
+        DATABASE_USERNAME: strapi
+        DATABASE_PASSWORD: sandworm-proud-gradient      
+      volumes:
+        - ./projects/strapi-merakiweddingplanner:/srv/app
+      ports:
+        - '1339:1337'
+      depends_on:
+        - mysql
+    strapi-hieublog:
+      image: strapi/strapi
+      environment:
+        DATABASE_CLIENT: mysql
+        DATABASE_HOST: mysql
+        DATABASE_PORT: 3306
+        DATABASE_NAME: strapi-hieublog
+        DATABASE_USERNAME: strapi
+        DATABASE_PASSWORD: sandworm-proud-gradient      
+      volumes:
+        - ./projects/strapi-hieublog:/srv/app
+      ports:
+        - '1340:1337'
+      depends_on:
+        - mysql       
 volumes:
   mysql-sync:
+  mysql8-sync:  
+  strapimysql:
+  nextcloud:
+  wordpress:
+  db:
