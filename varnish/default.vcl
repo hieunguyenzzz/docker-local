@@ -51,6 +51,18 @@ sub vcl_recv {
     if (req.http.host ~ "merakiweddingplanner\.com") {
         return (pass);
     }
+
+    if (req.http.host ~ "strapi\.merakicommerce\.com") {
+        return (pass);
+    }
+
+    if (req.http.host ~ "strapi\.hieunguyen\.dev") {
+        return (pass);
+    }
+
+    if (req.http.host ~ "elasticsearch\.hieunguyen\.dev") {
+        return (pass);
+    }
     
     if (req.method != "GET" &&
         req.method != "HEAD" &&

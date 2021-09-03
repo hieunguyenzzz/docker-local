@@ -1,6 +1,8 @@
 FROM php:7.4-fpm
 
-RUN docker-php-ext-install \  
+RUN docker-php-ext-install \ 
+  bcmath \
+  gd \
   opcache \
   pdo_mysql \
   mysqli
