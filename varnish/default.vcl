@@ -52,7 +52,19 @@ sub vcl_recv {
         return (pass);
     }
 
+    if (req.http.host ~ "designereditions\.hieunguyen\.dev") {
+        return (pass);
+    }
+
+    if (req.http.host ~ "strapi\.mobelaris\.com") {
+        return (pass);
+    }
+
     if (req.http.host ~ "strapi\.merakicommerce\.com") {
+        return (pass);
+    }
+
+    if (req.http.host ~ "designericons\.hieunguyen\.dev") {
         return (pass);
     }
 
@@ -60,7 +72,15 @@ sub vcl_recv {
         return (pass);
     }
 
+    if (req.http.host ~ "shopify-instagram-mobelaris\.hieunguyen\.dev") {
+        return (pass);
+    }
+
     if (req.http.host ~ "elasticsearch\.hieunguyen\.dev") {
+        return (pass);
+    }
+
+    if (req.http.host ~ "mobelaris\.hieunguyen\.dev") {
         return (pass);
     }
     

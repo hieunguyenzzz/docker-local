@@ -35,7 +35,8 @@ RUN docker-php-ext-install \
   xsl \
   zip \
   pcntl \
-  sockets
+  sockets \
+  mysqli
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install -j$(nproc) gd
@@ -57,7 +58,9 @@ COPY conf/php-fpm.conf /usr/local/etc/
 COPY bin/* /usr/local/bin/
 COPY conf/no-debug-non-zts-20180731/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20180731/
 
+
 WORKDIR /usr/local/var/www
-#chown www-data:www-data /var/www
+RUN mkdir -p /var/www/.composer
+RUN chown -R www-data:www-data /var/www
 
 CMD ["/usr/local/bin/start"]

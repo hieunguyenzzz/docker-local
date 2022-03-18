@@ -4,7 +4,7 @@ services:
     php73:
         build: ./php73
         volumes:
-          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
+          - "/mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects:/usr/local/var/www:cached"
           - "/ssh:/root/.ssh"
           - "/composer:/root/.composer"
           - ./php73/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -15,7 +15,7 @@ services:
     php74: 
       build: ./php74
       volumes: 
-        - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"    
+        - "/mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects:/usr/local/var/www:cached"    
     mysql:
       build: ./mysql
       command: "--innodb_use_native_aio=0"
@@ -34,13 +34,13 @@ services:
     nginx:
         build: ./nginx
         volumes:
-          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
-    varnish:
-        build: ./varnish          
+          - "/mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects:/usr/local/var/www:cached"    
         ports: 
-          - "80:80"
+          - "80:80"    
         depends_on:
-          - "nginx"        
+          - "strapi-hieunguyen-dev"
+          - "strapi-merakiweddingplanner"
+          - "strapi-merakicommerce"           
     elasticsearch:
         image: elasticsearch:7.14.0
         volumes: 
@@ -55,9 +55,9 @@ services:
         tty: true
         mem_limit: 3g
     meilisearch:
-        image: getmeili/meilisearch
+        image: getmeili/meilisearch:latest
         volumes: 
-          - ./projects/meilisearch/data.ms:/data.ms
+          - /mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects/meilisearch25/data.ms:/data.ms
         environment: 
           - MEILI_MASTER_KEY=mobelazz
     strapi-merakicommerce:
@@ -71,9 +71,7 @@ services:
           - DATABASE_PASSWORD=toni-0suction-2Science
           - DATABASE_SSL=false
         volumes:
-          - ./project/strapi-merakicommerce:/srv/app
-        depends_on:
-          - "mysql"
+          - /mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects/strapi-merakicommerce-com:/srv/app        
     strapi-hieunguyen-dev:
         image: strapi/strapi
         environment:
@@ -85,30 +83,49 @@ services:
           - DATABASE_PASSWORD=toni-0suction-2Science
           - DATABASE_SSL=false
         volumes:
-          - ./projects/strapi-hieunguyen-dev:/srv/app
+          - /mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects/strapi-hieunguyen-dev:/srv/app
         depends_on:
           - "mysql"
-    search:
-        image: typesense/typesense:0.9.2
-        volumes:
-          - searchdata:/data
-        ports:
-          - 8108:8108
+    strapi-merakiweddingplanner:
+        image: strapi/strapi
         environment:
-          API_KEY: sdasn2@#!
-        entrypoint: sh -c "/opt/typesense-server --data-dir /data --api-key=$${API_KEY}"
-    manticoresearch:
-        image: manticoresearch/manticore
-        ports: 
-          - 9306:9306
-          - 9308:9308        
+          - DATABASE_CLIENT=mysql
+          - DATABASE_HOST=mysql
+          - DATABASE_PORT=3306
+          - DATABASE_NAME=strapi-merakiweddingplanner
+          - DATABASE_USERNAME=strapi
+          - DATABASE_PASSWORD=toni-0suction-2Science
+          - DATABASE_SSL=false
         volumes:
-          - manticoresearch:/var/lib/manticore
-    elasticvue:
-        image: cars10/elasticvue
-        ports: 
-          - 8080:8080
-        
+          - /mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects/strapi-merakiweddingplanner:/srv/app
+        depends_on:
+          - "mysql"
+    strapi-mobelaris:
+        image: strapi/strapi
+        environment:
+          - DATABASE_CLIENT=mysql
+          - DATABASE_HOST=206.189.33.14
+          - DATABASE_PORT=3306
+          - DATABASE_NAME=strapimobelaris
+          - DATABASE_USERNAME=strapimobel_usr
+          - DATABASE_PASSWORD=2xUaKSvV9Kd4waNw
+          - DATABASE_SSL=false
+        volumes:
+          - /mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects/strapi-mobelaris:/srv/app    
+    myrecvan.hieunguyen.dev:
+        image: wordpress
+        restart: always
+        environment:
+          WORDPRESS_DB_HOST: mysql
+          WORDPRESS_DB_USER: myrecvan
+          WORDPRESS_DB_PASSWORD: who-campfire7-9Ageless
+          WORDPRESS_DB_NAME: myrecvan
+        volumes:
+          - /mnt/eb6ce2fb-3c58-4876-baf6-ae932743816f/projects/myrecvan:/var/www/html
+    varnish:
+        build: ./varnish          
+        depends_on:
+          - "nginx" 
 volumes:
   mysql-sync:
   mysql8-sync:  
