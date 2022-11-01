@@ -52,9 +52,17 @@ sub vcl_recv {
         return (pass);
     }
 
+    if (req.http.host ~ "rvshowusa\.hieunguyen\.dev") {
+        return (pass);
+    }
+
     if (req.http.host ~ "designereditions\.hieunguyen\.dev") {
         return (pass);
     }
+
+    # if (req.http.host ~ "staging\.designereditions\.com") {
+    #     return (pass);
+    # }
 
     if (req.http.host ~ "strapi\.mobelaris\.com") {
         return (pass);
