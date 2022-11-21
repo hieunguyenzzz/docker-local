@@ -5,7 +5,7 @@ services:
         build: ./php73
         volumes:
           - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
-          - "/home/gx71orx0jtq4/public_html:/home/gx71orx0jtq4/public_html"
+          - "/media/hieunguyen/Windows/projects:/media/hieunguyen/Windows/projects"
           - "/ssh:/root/.ssh"
           - "/composer:/root/.composer"
           - ./php73/conf/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -16,11 +16,7 @@ services:
     php74: 
       build: ./php74
       volumes: 
-        - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"    
-    php81: 
-      build: ./php81
-      volumes: 
-        - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"    
+        - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"        
     mysql:
       build: ./mysql
       command: "--innodb_use_native_aio=0"
@@ -32,15 +28,25 @@ services:
         - MYSQL_ROOT_PASSWORD=root123
         - MYSQL_USER=mage
         - MYSQL_PASSWORD=mage
+    postgres:
+      image: postgres
+      volumes: 
+        - postgres-data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_PASSWORD: example111
+      ports:
+          - "5432:5432"
     redis:
         image: redis
         ports:
           - "6379:6379"
+    deredis:
+        image: redis
     nginx:
         build: ./nginx
         volumes:
-          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"              
-          - "/home/gx71orx0jtq4/public_html:/home/gx71orx0jtq4/public_html"
+          - "/home/hieunguyen/docker-local/projects:/usr/local/var/www:cached"
+          - "/media/hieunguyen/Windows/projects:/media/hieunguyen/Windows/projects"
         
     elasticsearch:
         image: elasticsearch:7.14.0
@@ -54,13 +60,15 @@ services:
         - http.cors.allow-origin=/.*/
         - http.cors.enabled=true
         tty: true
-        mem_limit: 3g
+        mem_limit: 2g
     meilisearch:
         image: getmeili/meilisearch:v0.28.1
         volumes: 
           - meilisearchdata:/data.ms
         environment: 
-          - MEILI_MASTER_KEY=mobelazz   
+          - MEILI_MASTER_KEY=mobelazz 
+        ports: 
+          - "7700:7700"  
     myrecvan.hieunguyen.dev:
         image: wordpress
         restart: always
@@ -79,6 +87,7 @@ services:
           - "80:80"   
 volumes:
   mysql-sync:
+  postgres-data:
   mysql8-sync:  
   elasticdata:
   searchdata:
